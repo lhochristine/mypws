@@ -1,19 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>SVN Management</title>
-</head>
-<body>
-    <div>
-        <h1><a href="/">SVN Managements</a></h1>
-    </div>
+{% extends 'svn_permission/base.html' %}
+{% block content %}
 
-    <div>Branch: </div>
+    <div class="post">Branch: </div>
     {% for branch in branches %}
         <div>
             <p>{{ branch.branch_name }}</p>
         </div>
     {% endfor %}
-</body>
-</html>
+{% endblock %}
