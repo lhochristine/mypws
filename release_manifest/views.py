@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 import rest_framework
-from django_filters.rest_framework import DjangoFilterBackend
+from url_filter.integrations.drf import DjangoFilterBackend
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
