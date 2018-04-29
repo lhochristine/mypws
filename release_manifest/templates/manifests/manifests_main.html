@@ -1,0 +1,145 @@
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="http://code.angularjs.org/snapshot/angular.js"></script>
+    <script src="http://code.angularjs.org/snapshot/angular-resource.min.js"></script>
+    <script src="http://code.jquery.com/jquery-2.2.3.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).on('click', '.nav-list li', function() {
+            $(".nav-list li").removeClass("active");
+            $(this).addClass("active");
+        });
+    </script>
+
+    <script type="text/javascript">
+        $('[data-toggle="popover"]').popover();
+
+        $('body').on('click', function(e) {
+            $('data-toggle="popover"]').each(funciton() {
+                if ('$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                    $(this).popover('hide');
+                }
+            });
+        });
+    </script>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="//getbootstrap.com/2.3.2/assests/css/bootstrap-responsive.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.8/angular-material.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Changa" type="text/css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Work+Sans:300">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+sans:300i">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css">
+
+</head>
+
+<style type="text/css">
+    body {
+        padding-top: 60px;
+        overflow-y: visible;
+        font-size: 13px;
+        line-height: 20px;
+        font-family: "Trebuchet MS", Helvetica, sans-serif;
+        font weight: 500;
+    }
+
+    .sidebar-nav {
+        padding: 9px 0;
+    }
+
+    li a{
+        font-size: 12px;
+    }
+
+    h17 {
+        font-size: 12px;
+        color: #b6b6b6;
+        display: inline;
+        float: right;
+        vertical-align: middle;
+        text-decoration: bold;
+    }
+
+    .btn-round {
+        width: 40x;
+        height: 40px;
+        border-radius: 50%;
+    }
+
+    .btn-xs {
+        height: 22px;
+        padding: 2px 5px;
+        font-size: 12px;
+        line-height: 1.5;
+        border-radius: 3px;
+    }
+
+    .btn-round.btn-xs {
+        width: 10px;
+        height: 10px;
+    }
+
+    h18 {
+        font-size: 20px;
+        color: white;
+        text-decoration: bold;
+        display: inline;
+    }
+
+    .popover {
+        z-index: 9999;
+        position: fixed;
+    }
+
+    @media (max-width: 980px) {
+        .navbar-text.pull-right {
+            float: none;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+    }
+</style>
+
+<body style="...">
+
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner" style="...">
+            <div class="container-fluid">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="brand" href="#/" style="...">Release Manifest Administration</a>
+                <div class="navbar">
+                    <p class="navbar-text pull-right" style="...">
+                        {% if user.is_authenticated %}
+                            Logged in as <a href="#/" class="navbar-link" style="..."><b>{{ user.username }}</b></a> || <a href="/logout/?next=/release_manifest/login/">Log out</a>
+                        {% endif %}
+                    </p>
+                    <ul class="nav">
+                        <li class="active"><a href="#">Home</a></li>
+                        <li><a href="#about/">About</a></li>
+                        <li><a href="#help" data-toggle="modal" data-target="#help">Help?</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="..."></div>
+</body>
+
+<script src="{% static 'jquery/jquery.min.js' %}"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
+<script src="{% static 'bootstrap/bootstrap.min.js' %}"></script>
+<script src="//code.angularjs.org/snapshot/angular-animate.min.js"></script>
+<script src="//code.angularjs.org/snapshot/angular-aria.min.js"></script>
+<script src="//code.angularjs.org/snapshot/angular-material.min.js"></script>
+
+</html>

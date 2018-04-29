@@ -15,14 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.views.generic import TemplateView
 
 from django.contrib.auth import views
 
 urlpatterns = [
 #    url(r'^release_manifest/', include('release_manifest.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^accounts/login/$', views.login, name='login'),
-    url(r'^accounts/logout/$', views.logout, name='logout', kwargs={'next_page': '/'}),
-    url(r'^blog/', include('blog.urls')),
-    url(r'', include('svn_permission.urls'))
+    url(r'^$', TemplateView.as_view(template_name='homepage.html'), name='homepage'),
+
+    #url(r'^accounts/login/$', views.login, name='login'),
+    #url(r'^accounts/logout/$', views.logout, name='logout', kwargs={'next_page': '/'}),
+    #url(r'^blog/', include('blog.urls')),
+    url(r'^svn_permission/', include('svn_permission.urls')),
+    url(r'^release_manifest/', include('release_manifest.urls'))
 ]

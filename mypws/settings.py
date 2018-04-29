@@ -14,7 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -37,8 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog',
+    'django_filters',
+    'jquery',
+    'djangoformsetjs',
+    'rest_framework',
+    'rest_framework_extensions',
     'svn_permission',
+    'release_manifest',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +61,7 @@ ROOT_URLCONF = 'mypws.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['%s/templates/' % (PROJECT_DIR),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,3 +128,51 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_REDIRECT_URL = '/'
+
+# Restframework
+REST_FRAMEWORK = {
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    'DEFAULT_FILTER_BACKENDS': ['url_filter.integrations.drf.DjangoFilterBackend',]
+}
+
+# LDAP authentication
+#import ldap
+#from django_auth_ldap.config import LDAPSearch, GroupOfUniqueNamesType
+#from django_auth_ldap.config import LDAPSearch, PosixGroupType
+
+# LDAP base configuration
+#AUTH_LADP_SERVER_URI = 'ldap://localhost:1389'
+#AUTH_LDAP_BIND_AS_AUTHENTICATING_USER = True
+#AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=xxx,ou=xxx,dc=xxx,dc=xxx", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+
+# populate the Django local user list from the LDAP directory
+#AUTH_LDAP_USER_ATTR_MAP = {
+#    "first_name": "givenName",
+#    "last_name": "sn",
+#    "email": "mail"
+#}
+
+# map the Django user with permission from the LDAP app group
+#AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=xxx,ou=xxx,dc=xxx,dc=xxx", ldap.SCOPE_SUBTREE, "(objectClass=groupOfUniqueNames)")
+#AUTH_LDAP_GROUP_TYPE = GroupOfUniqueNamesType(name_attr="cn")
+
+# set Django 'is_staff' flag
+#AUTH_LDAP_USER_FLAG_BY_GROUP = {
+#    "is_staff": ["cn=Requester,ou=Papriqa,ou=BuildGroups,ou=Build,ou=unix,dc=npac,dc=ics,dc=iconectiv,dc=com",
+#                 "cn=Inventory_user,ou=Papriqa,ou=BuildGroups,ou=Build,ou=unix,dc=npac,dc=ics,dc=iconectiv,dc=com"]
+#}
+
+# Cache ldap group setting for 10 minutes to minimize LDAP traffic
+#AUTH_LDAP_CACHE_GROUPS = True
+#AUTH_LDAP_GROUP_CACHE_TIMEOUT = 1800
+
+# use LDAP group membership to define group permission
+#AUTH_LDAP_FIND_GROUP_PERMS = True
+#AUTH_LDAP_MIRROR_GROUPS = True
+
+# Keep ModelBackend for per-user permissions and maybe a local superuser
+#AUTHENTICATION_BACKENDS = (
+#    'django_auth_ldap.backend.LDAPBackend',
+#    'django.contrib.auth.backends.ModelBackend'
+#)
+

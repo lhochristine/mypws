@@ -1,0 +1,16 @@
+{% extends "svn_permission/base.html" %}
+
+
+
+{% block contents %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">{{ branch }}</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+
+<a href="{% url 'homepage' %}">Back to Branch Index base page</a>
+
+
+{% endblock %}

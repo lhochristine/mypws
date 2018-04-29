@@ -1,0 +1,25 @@
+                        <!-- .panel-heading -->
+                        <div class="panel-body">
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+                                    {% for m in mods %}
+                                        {% if m.repo == r %}
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ m.id }}">{{ m }}</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse{{ m.id }}" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            {% for g in groups %}
+                                            <span>{{ g.name }}</span>
+                                            {% endfor %}
+                                            <span>{{ users }}</span>
+                                        </div>
+                                    </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- .panel-body -->

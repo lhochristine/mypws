@@ -1,0 +1,54 @@
+{% extends "svn_permission/base.html" %}
+
+
+
+{% block contents %}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">{{ branch.branch_name }}</h1>
+        <a href="{% url 'branch_list' %}">Back to SVN base page</a>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+    {% for r in repos %}
+        {% if r in repo %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            {{ r.repo_name }}
+                        </div>
+                        <!-- .panel-heading -->
+                        <div class="panel-body">
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+                                    {% for p in parts %}
+                                        {% if r.repo_name in p.associated_repo %}
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ p.id }}">{{ p }}</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse{{ p.id }}" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            {% for perm in p.get_group_perm %}
+                                            <span>{{ perm }}</span></br>
+                                            {% endfor %}
+                                            <span> users </span>
+                                        </div>
+                                    </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- .panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        {% endif %}
+    {% endfor %}
+{% endblock %}
