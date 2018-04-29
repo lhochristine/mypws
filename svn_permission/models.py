@@ -79,6 +79,6 @@ class PartitionTest(models.Model):
         rest = self.group_perm.all().exclude(group='svnadmin').exclude(group='buildadmin').order_by('group')
 
         sort_list = list(chain(svnadmin, buildadm, rest))
-        print "sort_list %s" % sort_list
+        print ('sort_list {}'.format(sort_list))
         return sort_list
 

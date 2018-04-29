@@ -26,18 +26,18 @@ def index(request):
 
 
 def branch_detail(request, branch_name):
-    print "input branch_number %s" % branch_name
+    print ("input branch_number %s" % branch_name)
     if branch_name != 'trunk':
         pk = 'RB-' + branch_name
     else:
         pk = branch_name
-    print "pk %s" % pk
+    print ("pk %s" % pk)
     branch = get_object_or_404(Branch, pk=pk)
     branches = Branch.objects.all() # used for sidebar
 
     repos = Repository.objects.all() # used for sidebar
     repo_set = Repository.objects.filter(branches=pk)
-    print "repo.filter [%s]" % repo_set
+    print ("repo.filter [%s]" % repo_set)
 
     parts = PartitionTest.objects.filter(branch=pk)
     parts[0].get_group_perm()
@@ -61,14 +61,14 @@ def branch_detail(request, branch_name):
                   {'branches':branches, 'repos':repos, 'branch':branch, 'repo':repo_set, 'parts': parts})
 
 def repo_detail(request, repo_name):
-    print "input repo_name %s" % repo_name
+    print ("input repo_name %s" % repo_name)
     repo = Repository.objects.get(repo_name=repo_name)
     branch_set = repo.branches.all()
-    print "associated branches %s" % branch_set
+    print ("associated branches %s" % branch_set)
     return render(request, 'svn_permission/r_detail.html', {'branches':Branch.objects.all(), 'repos':Repository.objects.all(), 'branch_set':branch_set, 'repo': repo})
 
 def repo_detail2(request, repo_name):
-    print "input repo_name %s" % repo_name
+    print ("input repo_name %s" % repo_name)
     #if branch_name == 'trunk':
     #    branch = get_object_or_404(Branch, pk=branch_name)
     branches = Branch.objects.all()
