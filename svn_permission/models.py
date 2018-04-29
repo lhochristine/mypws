@@ -8,7 +8,7 @@ from svn_permission.choices import *
 
 # Create your models here.
 class Branch(models.Model):
-    branch_name = models.CharField(max_length=32, primary_key=True, default='turnk')
+    branch_name = models.CharField(max_length=32, primary_key=True, default='trunk')
     class Meta:
         verbose_name_plural = "branches"
         ordering = ['-branch_name']

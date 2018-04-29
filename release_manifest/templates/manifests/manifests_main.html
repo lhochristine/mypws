@@ -1,145 +1,174 @@
-{% load staticfiles %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <script src="http://code.angularjs.org/snapshot/angular.js"></script>
-    <script src="http://code.angularjs.org/snapshot/angular-resource.min.js"></script>
-    <script src="http://code.jquery.com/jquery-2.2.3.min.js"></script>
+{% include "manifests/manifests_header.html" %}
 
-    <script type="text/javascript">
-        $(document).on('click', '.nav-list li', function() {
-            $(".nav-list li").removeClass("active");
-            $(this).addClass("active");
-        });
-    </script>
+<div class = "navbar navbar-fixed-top">
 
-    <script type="text/javascript">
-        $('[data-toggle="popover"]').popover();
+   <div class="navbar-inner" style="height:43px;">
+      <div>
+         <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+         </button>
+         <a class = "navbar-brand" href = "#">Release Manifest Administration</a>
 
-        $('body').on('click', function(e) {
-            $('data-toggle="popover"]').each(funciton() {
-                if ('$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-                    $(this).popover('hide');
-                }
-            });
-        });
-    </script>
+         <div class="navbar">
+            <p class="navbar-text pull-right">
+            {% if user.is_authenticated %}
+               Logged in as <a href="#/" class="navbar-link"><b>{{ user.username }}</b></a> || <a href="/logout/?next=/release_manifest/login/">Log out</a>
+            {% else %}
+               Welcome, new user. Please <a href="/release_manifest/login" class="navbar-link"><b>log in.</b></a>
+            {% endif %}
+            </p>
+            <ul class = "navbar">
+               <li class = "active"><a href = "#">Home</a></li>
+               <li><a href = "#">About</a></li>
+            </ul>
+         </div>
+      </div>
+   </div> <!-- navbar inner -->
 
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-    <link rel="stylesheet" href="//getbootstrap.com/2.3.2/assests/css/bootstrap-responsive.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.8/angular-material.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+</div> <!-- navbar-fixed-top -->
 
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Changa" type="text/css">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Work+Sans:300">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+sans:300i">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css">
-
-</head>
-
-<style type="text/css">
-    body {
-        padding-top: 60px;
-        overflow-y: visible;
-        font-size: 13px;
-        line-height: 20px;
-        font-family: "Trebuchet MS", Helvetica, sans-serif;
-        font weight: 500;
-    }
-
-    .sidebar-nav {
-        padding: 9px 0;
-    }
-
-    li a{
-        font-size: 12px;
-    }
-
-    h17 {
-        font-size: 12px;
-        color: #b6b6b6;
-        display: inline;
-        float: right;
-        vertical-align: middle;
-        text-decoration: bold;
-    }
-
-    .btn-round {
-        width: 40x;
-        height: 40px;
-        border-radius: 50%;
-    }
-
-    .btn-xs {
-        height: 22px;
-        padding: 2px 5px;
-        font-size: 12px;
-        line-height: 1.5;
-        border-radius: 3px;
-    }
-
-    .btn-round.btn-xs {
-        width: 10px;
-        height: 10px;
-    }
-
-    h18 {
-        font-size: 20px;
-        color: white;
-        text-decoration: bold;
-        display: inline;
-    }
-
-    .popover {
-        z-index: 9999;
-        position: fixed;
-    }
-
-    @media (max-width: 980px) {
-        .navbar-text.pull-right {
-            float: none;
-            padding-left: 5px;
-            padding-right: 5px;
-        }
-    }
-</style>
-
-<body style="...">
-
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner" style="...">
-            <div class="container-fluid">
-                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="brand" href="#/" style="...">Release Manifest Administration</a>
-                <div class="navbar">
-                    <p class="navbar-text pull-right" style="...">
-                        {% if user.is_authenticated %}
-                            Logged in as <a href="#/" class="navbar-link" style="..."><b>{{ user.username }}</b></a> || <a href="/logout/?next=/release_manifest/login/">Log out</a>
-                        {% endif %}
-                    </p>
-                    <ul class="nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#about/">About</a></li>
-                        <li><a href="#help" data-toggle="modal" data-target="#help">Help?</a></li>
-                    </ul>
-                </div>
+<div ng-app="manifestApp" ng-controller="ManifestController">
+<div class="container-fluid">
+   <div class="row-fluid" id="rowFluidDiv">
+      <div class="span2">
+         <div class="well sidebar-nav" style="position: fixed; width: 190px; height: 80%;">
+            {% verbatim %}
+            <p class="nav-header" style="font-weight: bbold;">Total Manifests# {{ number }}</p>
+            {% endverbatim %}
+            <p class="nav-header" style="font-weight: bbold;">Filter by Software Type</p>
+            <div class="panel panel-group" id="accordion">
+               <div class="panel panel-default">
+                  <ul class="nav nav-list">
+                     <li class="active">
+                        <a href="#prodSubmenu" data-toggle="collapse" data-target="#prodSubmenu" data-parent="#accordion" aria-expanded="true" role="button" aria-controls="prodSubmenu" ng-click="MasterFilter('all')">Production</a>
+                     </li>
+                  </ul>
+                  <div id="prodSubmenu" class="panel-collapse collapse in">
+                     <ul class="nav nav-list panel-body">
+                        <li>
+                           <ul class="nav nav-list">
+                              <li class="nav-header">Filter by Revision</li>
+                              <li><a href="#" ng-click="MasterFilter('all')">All Manifests</a></li>
+                              <li><a href="#">RC</a></li>
+                              <li><a hred="#">Non-RC</a></li>
+                              <li class="nav-header">Filter by Release</li>
+                              <li><a href="#">4.2.0</a></li>
+                              <li><a href="#">4.1.0</a></li>
+                           </ul>
+                        </li>
+                     </ul>
+                  </div> <!-- prodSumenu panel-collapse -->
+               </div>
+               <div class="panel panel-default">
+                  <ul class="nav nav-list">
+                     <li><a href="#opsSubmenu" data-toggle="collapse" data-target="#opsSubmenu" data-parent="#accordion" aria-expanded="false" role="button" aria-control="opsSubmenu" ng-click="MasterFilter('opsall')">Operations</a></li>
+                  </ul>
+                  <div id="opsSubmenu" class="panel-collapse collapse">
+                     <ul class="nav nav-list panel-body">
+                        <li>
+                           <ul class="nav nav-list">
+                              <li class="nav-header">Filter by Revision</li>
+                              <li><a href="#" ng-click="MasterFilter('opsall')">All Manifests</a></li>
+                              <li><a href="#">RC</a></li>
+                              <li><a href="#">Non-RC</a></li>
+                              <li class="nav-header">Filter by Release</li>
+                              <li><a href="#">4.2.0</a></li>
+                              <li><a href="#">4.1.0</a></li>
+                           </ul>
+                        </li>
+                     </ul>
+                  </div>
+               </div> <!-- panel-default opsSubmenu -->
             </div>
-        </div>
-    </div>
+         </div> <!-- well -->
+      </div>  <!-- span -->
 
-    <div style="..."></div>
-</body>
+      <div style="padding-left: 230px;">
+         <form>
+            <div class="form-group">
+               <div class="input-group">
+                  <div class="input-group-addon"><span class="fa fa-search"></span></div>
+                  <input type="text" class="form-control" placeholder="Search Manifest Revision" style="width: 95%; height:28px;">
+               </div>
+            </div>
+         </form>
+      </div>
 
-<script src="{% static 'jquery/jquery.min.js' %}"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
-<script src="{% static 'bootstrap/bootstrap.min.js' %}"></script>
-<script src="//code.angularjs.org/snapshot/angular-animate.min.js"></script>
-<script src="//code.angularjs.org/snapshot/angular-aria.min.js"></script>
-<script src="//code.angularjs.org/snapshot/angular-material.min.js"></script>
+      <div style="padding-left: 230px; width: 100%; overflow-y: auto; height: 600px;">
+         <table class="table" id="manifests">
+            <thead style="font-weight:700; font-size: 11px; font-weight: bold; line-height: 20px; color: #999999; text-shadow: 0 1px 1 rgba(255, 255, 255, 0.5); text-transform: uppercase;">
+            <tr>
+               <td>
+                  <a href="#/" >External Release
+                     <span class="fa fa-caret-down"></span>
+                     <span class="fa fa-caret-up"></span>
+                  </a>
+               </td>
 
-</html>
+               <td>
+                  <a href="#/" >Software Type
+                     <span class="fa fa-caret-down"></span>
+                     <span class="fa fa-caret-up"></span>
+                  </a>
+               </td>
+
+               <td>
+                  <a href="#/" >Release
+                     <span class="fa fa-caret-down"></span>
+                     <span class="fa fa-caret-up"></span>
+                  </a>
+               </td>
+
+               <td>
+                  <a href="#/" >Revision
+                     <span class="fa fa-caret-down"></span>
+                     <span class="fa fa-caret-up"></span>
+                  </a>
+               </td>
+
+               <td>
+                  <a href="#/" >Date Added
+                     <span class="fa fa-caret-down"></span>
+                     <span class="fa fa-caret-up"></span>
+                  </a>
+               </td>
+
+               <td>
+                  Artifacts List
+               </td>
+
+               <td>
+                  User Action
+               </td>
+
+            </tr>
+            </thead>
+
+            <tbody>
+               <tr ng-repeat="manifest in manifests">
+                  {% verbatim %}
+                  <td>{{ manifest.ext_release }}</td>
+                  <td>{{ manifest.sw_type }}</td>
+                  <td>{{ manifest.release }}</td>
+                  <td>{{ manifest.revision }}</td>
+                  <td>{{ manifest.date_added | date:'MM d, yyyy, h:mm:ss a'}}</td>
+                  <td>
+                     <a href="/release_manifest/manifest/{{ manifest.id }}/artifactslist"
+                        onclick="window.open(this.href, 'mywin_artifacts','left=20,top=20,width=1200,height=400,toolbar=1,resizable=0,scrollbars=1'); return false;"
+                        data-toggle="tooltip" title="Artifacts List of Revision# {{ manifest.revision }}">
+                     <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-th-list"></span></button>
+                     </a>
+                  </td>
+                  {% endverbatim %}
+               </tr>
+            </tbody>
+         </table>
+      </div>
+
+   </div> <!-- row-fluid -->
+</div>
+</div> <!-- ng-app -->
+
+{% include "manifests/manifests_footer.html" %}

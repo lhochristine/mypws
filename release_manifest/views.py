@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 
 import rest_framework
@@ -38,8 +38,12 @@ class ArtifactViewSet(NestedViewSetMixin, ModelViewSet):
 #    filter_fields = ('parent_manifest__release', 'parent_manifest__revision', 'name')
 
 def manifests_index(request):
-    return render(request, 'manifests/manifests_testmain.html')
+    return render(request, 'manifests/manifests_main.html')
 
 def jsonize(request):
     manifests = Manifest.objects.all()
     return HttpResponse(json.dumps(manifests), content_type='application/json')
+
+def artifacts_list(request, pk):
+    artifacts = get_object_or_404(Manifest, pk=pk)
+    return render(request, 'manifests/manifest_artifacts.html', {'artifacts': artifacts})

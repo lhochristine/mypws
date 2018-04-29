@@ -12,6 +12,6 @@ urlpatterns = [
 
     url(r'^manifestslist', manifests_index, name='manifests-list'),
     url(r'^api-json/', include(router.urls)),
-#    url(r'^manifest/(?P<pk>\d+)/artifactslist', artifacts_list, name='artifacts_list'),
+    url(r'^manifest/(?P<pk>\d+)/artifactslist', artifacts_list, name='artifacts_list'),
 
 ]

@@ -1,0 +1,59 @@
+
+{% include "manifests/manifests_header.html" %}
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner" style="height:43px;">
+        <div class="container-fluid">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="brand" href="#/">Artifacts List of Manifest Revision# <span style="color: #0099cc">{{ artifacts.revision }}</span></a>
+            <a class="brand" href="#/">Release# <span style="color: #0099cc">{{ artifacts.release }}</span></a>
+            <a class="brand" href="#/">External Release# <span style="color: #0099cc">{{ artifacts.ext_release }}</span></a>
+            <a class="brand" href="#/">Software Type <span style="color: #0099cc">{{ artifacts.sw_type }}</span></a>
+        </div>
+    </div> <!-- navbar-inner -->
+
+    <div class="container-fluid">
+        <div class="row-fluid" id="artifactDiv">
+            <div style="width: 100%; overflow-y: auto; height: 600px;">
+                <table class="table" id="artifactsList">
+                    <thead style="font-weight:700; font-size: 11px; font-weight: bold; line-height: 20px; color: #0099cc; text-shadow: 0 1px 1 rgba(255, 255, 255, 0.5); text-transform: uppercase;">
+                        <tr>
+                            <td>Name</td>
+                            <td>Group</td>
+                            <td>Version</td>
+                            <td>Vendor</td>
+                            <td>Var Name</td>
+                            <td>Built By</td>
+                            <td>Comment</td>
+                            <td>Status</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for artifact in artifacts.artifacts.all %}
+                        <tr>
+                            <td>{{ artifact.name }}</td>
+                            <td>{{ artifact.group }}</td>
+                            <td>{{ artifact.version }}</td>
+                            <td>{{ artifact.vendor }}</td>
+                            <td>{{ artifact.var_name }}</td>
+                            <td>{{ artifact.built_by }}</td>
+                            <td>{{ artifact.comment }}</td>
+                            {% if artifact.deleted %}
+                                <td style="font-weight: bold; color: #ff0000;">Not Included</td>
+                            {% else %}
+                                <td>Included</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> <!-- container-fluid -->
+</div> <!-- navbar-fixed-top -->
+
+{% include "manifests/manifests_footer.html" %}
