@@ -1,0 +1,46 @@
+
+{% include "manifests/manifests_header.html" %}
+
+<form action="/release_manifest/duplicate/{{ manifest.id }}" method="post" role="form">
+    {% csrf_token %}
+    <div>
+        <table class="table" style="width: 95%" align="center">
+            <tbody>
+            <tr>
+                <td class="active noBorder" style="text-align: right;">Duplicate Manifest Release# </td>
+                <td class="active noBorder" style="color: #0099cc;">{{ manifest.release }}</td>
+                <td class="active noBorder" style="text-align: right;">Revision# </td>
+                <td class="active noBorder" style="color: #0099cc;">{{ manifest.revision }}</td>
+                <td class="active noBorder" style="text-align: right;">External Release# </td>
+                <td class="active noBorder" style="color: #0099cc;">{{ manifest.ext_release }}</td>
+            </tr>
+            <tr>
+                <td class="active noBorder" style="text-align: right;"> Software Type </td>
+                <td class="active noBorder" style="color: #0099cc;">{{ manifest.swtype_name }}</td>
+                <td class="active noBorder" style="text-align: right;">Manifest Type: </td>
+                <td class="active noBorder">
+                    <lable class="radio-inline"><input id="rc-radio" type="radio" value="" name="optradio" checked="checked">RC</lable>
+                    <lable class="radio-inline"><input id="test-radio" type="radio" value="" name="optradio">Test</lable>
+                    <lable class="radio-inline"><input id="other-radio" type="radio" value="" name="optradio">Other</lable>
+                </td>
+                <td class="active noBorder" style="text-align: right;"></td>
+                <td class="active noBorder" style="color: #0099cc;"></td>
+            </tr>
+            <tr>
+                <td class="active noBorder" style="text-align: right;">To Manifest Release# </td>
+                <td class="active noBorder" style="color: #0099cc;">{{ form.release }}</td>
+                <td class="active noBorder" style="text-align:right;">Revision# </td>
+                <td class="active noBorder" style="color: #0099cc;">{{ form.revision }}</td>
+                <td class="active noBorder" style="text-align: right;">External Release# </td>
+                <td class="active noBorder" style="color: #0099cc;">{{ form.ext_release }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="text-align: center;">
+        <input type="submit" value="Save as New" class="btn btn-s btn-primary form-control btn-center" id="submit-id-save-as-new" name="save-as">
+        <a class="btn btn-s btn-primary btn-center" href="javascript:window.close();" role="button">Cancel</a>
+    </div>
+</form>
+
+{% include "manifests/manifests_footer.html" %}

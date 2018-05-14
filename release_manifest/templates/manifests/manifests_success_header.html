@@ -6,56 +6,18 @@
       <meta http-equiv = "X-UA-Compatible" content = "IE = edge">
       <meta name = "viewport" content = "width = device-width, initial-scale = 1">
 
-      <title>DevOps Management App</title>
+      <title>Bootstrap 101 Template</title>
 
       <script src="{% static 'angular/angular.js' %}"></script>
       <script src="{% static 'jquery/jquery.min.js' %}"></script>
       <script src="{% static 'manifest/manifestindex.js' %}"></script>
 
-      <script type="text/javascript">
-         $(document).on('click', '.nav-list li', function() {
-            $(".nav-list li").removeClass("active");
-            $(this).addClass("active");
-         });
-      </script>
-
-      <!-- script type="text/javascript">
-         $('[data-toggle="popover"]').popover();
-         $('body').on('click', function(e) {
-            $('[data-toggle="popover"]').each(function () {
-               // the 'is' for buttons that trigger popups
-               // the 'has' for icons within a button that triggers a popup
-               if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-                  $(this).popover('hide');
-               }
-            });
-         });
-
-      </script -->
-
-      <script type="text/javascript">
-         $(function () {
-            $('#rc-radio').on('click', function() {
-               var text=$('#id_revision');
-               text.val('rc_');
-            });
-         });
-
-         $(function () {
-            $('#test-radio').on('click', function() {
-               var text=$('#id_revision');
-               text.val('test_');
-            });
-         });
-
-         $(function () {
-            $('#other-radio').on('click', function() {
-               var text=$('#id_revision');
-               var timeVal=Date.now()/1000 | 0;
-               text.val(timeVal);
-            });
-         });
-      </script>
+    <script>
+        window.onunload = refreshParent;
+        function refreshParent() {
+            window.opener.location.reload();
+        }
+    </script>
 
       <!-- Bootstrap -->
       <link href = "{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel = "stylesheet">
@@ -79,6 +41,7 @@
 <style type="text/css">
     body {
         padding-top: 60px;
+        overflow-y: visible;
         font-size: 13px;
         line-height: 20px;
         font-family: "Trebuchet MS", Helvetica, sans-serif;
@@ -145,5 +108,6 @@
         }
     }
 </style>
+
 
 <body style="overflow:hidden;">

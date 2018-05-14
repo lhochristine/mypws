@@ -43,6 +43,11 @@ class Manifest(models.Model):
     def __str__(self):
         return self.release + "-" + self.revision
 
+    def swtype_name(self):
+        for i in SW_TYPE_CHOICES:
+            if i[0] == self.sw_type:
+                return i[1]
+
 
 class Artifact(models.Model):
     parent_manifest = models.ForeignKey(Manifest, related_name='artifacts')
@@ -71,8 +76,10 @@ def DeleteOldManifest(sender, instance, raw=False, **kwargs):
         skippedFirst = False
         for m in sorted(manlist, key=lambda x: x.date_added, reverse=True):
             if skippedFirst and (m.date_added is None or m.date_added < keep_date):
-                m.delete()
+                print("About to delete %s" %m.revision)
+                #m.delete()
             else:
+                print("Skip manifest %s" %m.revision)
                 skippedFirst = True
 
         print("about to kick off the jenkins job")

@@ -90,48 +90,48 @@
             <div class="form-group">
                <div class="input-group">
                   <div class="input-group-addon"><span class="fa fa-search"></span></div>
-                  <input type="text" class="form-control" placeholder="Search Manifest Revision" style="width: 95%; height:28px;">
+                  <input type="text" class="form-control" placeholder="Search Manifest Revision" ng-model="searchManifest" style="width: 95%; height:28px;">
                </div>
             </div>
          </form>
       </div>
 
-      <div style="padding-left: 230px; width: 100%; overflow-y: auto; height: 600px;">
+      <div style="padding-left: 230px; width: 100%; overflow-y: auto; height: 450px;">
          <table class="table" id="manifests">
             <thead style="font-weight:700; font-size: 11px; font-weight: bold; line-height: 20px; color: #999999; text-shadow: 0 1px 1 rgba(255, 255, 255, 0.5); text-transform: uppercase;">
             <tr>
                <td>
-                  <a href="#/" >External Release
-                     <span class="fa fa-caret-down"></span>
-                     <span class="fa fa-caret-up"></span>
+                  <a href="#/" ng-click="sortType = 'ext_release'; sortReverse = !sortReverse" >External Release
+                     <span ng-show="sortType == 'ext_release' && !sortReverse" class="fa fa-caret-down"></span>
+                     <span ng-show="sortType == 'ext_release' && sortReverse" class="fa fa-caret-up"></span>
                   </a>
                </td>
 
                <td>
-                  <a href="#/" >Software Type
-                     <span class="fa fa-caret-down"></span>
-                     <span class="fa fa-caret-up"></span>
+                  <a href="#/" ng-click="sortType = 'release'; sortReverse = !sortReverse">Software Type
+                     <span ng-show="sortTYpe == 'release' && !sortReverse" class="fa fa-caret-down"></span>
+                     <span ng-show="sortTYpe == 'release' && sortReverse" class="fa fa-caret-up"></span>
                   </a>
                </td>
 
                <td>
-                  <a href="#/" >Release
-                     <span class="fa fa-caret-down"></span>
-                     <span class="fa fa-caret-up"></span>
+                  <a href="#/" ng-click="sortType = 'release'; sortReverse = !sortReverse">Release
+                     <span ng-show="sortTYpe == 'release' && !sortReverse" class="fa fa-caret-down"></span>
+                     <span ng-show="sortTYpe == 'release' && sortReverse" class="fa fa-caret-up"></span>
                   </a>
                </td>
 
                <td>
-                  <a href="#/" >Revision
-                     <span class="fa fa-caret-down"></span>
-                     <span class="fa fa-caret-up"></span>
+                  <a href="#/" ng-click="sortType = 'revision'; sortReverse = !sortReverse">Revision
+                     <span ng-show="sortTYpe == 'release' && !sortReverse" class="fa fa-caret-down"></span>
+                     <span ng-show="sortTYpe == 'release' && sortReverse" class="fa fa-caret-up"></span>
                   </a>
                </td>
 
                <td>
-                  <a href="#/" >Date Added
-                     <span class="fa fa-caret-down"></span>
-                     <span class="fa fa-caret-up"></span>
+                  <a href="#/" ng-click="sortType = 'date_added'; sortReverse = !sortReverse">Date Added
+                     <span ng-show="sortTYpe == 'date_added' && !sortReverse" class="fa fa-caret-down"></span>
+                     <span ng-shwo="sortType == 'date_added' && sortReverse" class="fa fa-caret-up"></span>
                   </a>
                </td>
 
@@ -147,7 +147,7 @@
             </thead>
 
             <tbody>
-               <tr ng-repeat="manifest in manifests">
+               <tr ng-repeat="manifest in manifests | orderBy:sortType:sortReverse | filter:searchManifest">
                   {% verbatim %}
                   <td>{{ manifest.ext_release }}</td>
                   <td>{{ manifest.sw_type }}</td>
@@ -160,6 +160,23 @@
                         data-toggle="tooltip" title="Artifacts List of Revision# {{ manifest.revision }}">
                      <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-th-list"></span></button>
                      </a>
+                  </td>
+                  <td>
+                      <a href="/release_manifest/duplicate/{{ manifest.id }}"
+                         onclick="window.open(this.href, 'mywin_duplicate','left=50,top=50,width=1000,height=350,toolbar=1,resizable=0,scrollbars=1'); return false;"
+                         data-toggle="tooltip" title="Duplicate Manifest Revision# {{ manifest.revision }}">
+                      <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-duplicate"></span></button>
+                      </a>
+                      <a href="/release_manifest/update/{{ manifest.id }}"
+                         onclick="window.open(this.href, 'mywin_update', 'left=20,top=20,width=1200,height=500,toolbar=1,resizable=0,scrollbars=1'); return false;"
+                         data-toggle="tooltip" title="Update Manifest Revision# {{ manifest.revision }}">
+                      <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-edit"></span></button>
+                      </a>
+                      <a href="/release_manifest/delete/{{ manifest.id }}"
+                         onclick="window.open(this.href, 'mywin_delete','left=50,top=50,width=800,height=350,toolbar=1,resizable=0,scrollbars=1'); return false;"
+                         data-toggle="tooltip" title="Delete Manifest Revision# {{ manifest.revision }}">
+                      <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-remove"></span></button>
+                      </a>
                   </td>
                   {% endverbatim %}
                </tr>

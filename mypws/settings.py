@@ -134,44 +134,179 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['url_filter.integrations.drf.DjangoFilterBackend',]
 }
 
+"""
+import sys, logging
+#
+# custom formatter to print exception info and text inside of double quotes
+# for meeting splunk forwarder parse principle
+#
+class PwsFormatter(logging.Formatter):
+    def __init__(self, default):
+        self._fmt = default._fmt
+        self.datefmt = default.fmt
+    
+    def format(self, record):
+        #
+        Format the specified record as text
+        
+        The record's .....
+        #
+        record.message = record.getMessage()
+        if self.usersTime():
+            record.asctime = self.formatTime(record, self.datefmt)
+        s = self._fmt % record.__dict__
+        
+        if record.exc_info:
+            if not record.exc_text:
+                record.exc_text = self.formatException(record.exc_info)
+                
+        if record.exc_text:
+            if s[-1:] != "\n":
+                s = s + "\n"
+            try:
+                s = s + record.exc_text
+            except UnicodeError:
+                s = s + record.exc_text.decode(sys.getfilesystemencoding(),
+                                                'replace')
+        
+        # Before returning formatted string, replace all double quotes in the string
+        # then quote the text string to the end including record.exc_text
+        s = s.replace('"', '') + '"'
+        s = s.replace('text=', 'text="')
+        
+        return s
+        
+def PwsFmtFactory(fmt, datefmt):
+    default = logging.Formatter(fmt, datefmt)
+    return PwsFormatter(default)
+
+LOGGING_DIR = get_env_setting('LOGS_PATH')
+LOGGING_MAX_SIZE = 1024 * 1024 * 10 # 10MB
+LOGGING_FILE_COUNT = 10
+LOGGING_DEFAULT_LEVEL = get_env_setting('LOGGING_DEFAULT_LEVEL', 'DEBUG')
+LOGGING_FILE_NAME = get_env_setting('LOGGING_FILE_NAME')
+
+SECURITY_LOGGING_DIR = get_env_setting('SECURITY_LOGGING_DIR')
+SECURITY_LOGGING_MAX_SIZE = 1024 * 1024 * 10 # 10MB
+SECURITY_LOGGING_FILE_COUNT = 10
+SECURITY_LOGGING_DEFAULT_LEVEL = get_env_setting('SECURITY_LOGGING_DEFAULT_LEVEL', 'DEBUG')
+SECURITY_LOGGING_FILE_NAME = get_env_setting('SECURITY_LOGGING_FILE_NAME')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False;
+    'formatters': {
+        'pws_verbose': {
+            '()': PwsFmtFactory,
+            'format': '%(asctime)s.%(msec)03dZ, leve=%(levelname)s, host=' + os.uname()[1] + ', module=%(module)s, pid=%(process)d, tid=%(thread)d, text=%(message)s[%(exc_info)s]',
+            'datefmt': '%Y-%m-%dT%H:%M:%S',
+        },
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d, %(thread)d %(message)s',
+            'datefmt': '%Y-%m-%dT%H:%M:%S',
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'filters': {
+        'requre_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'console': {
+            'level': 'ERROR',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['requre_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'axes_log': {
+            'level': 'INFO',
+            'class': 'django.utils.log.AdminEmailHandler',
+        },
+        'django': {
+            'level': LOGGING_DEFAULT_LEVEL,
+            'class': 'logging.handlers.RotatingFileHandler',
+            'maxBytes': LOGGING_MAX_SIZE,
+            'backupCount': LOGGING_FILE_COUNT,
+            'filename': LOGGING_DIR + LOGGING_FILE_NAME,
+            'formatter': 'pws_verbose',
+        },
+        'security': {
+            'level': SECURITY_LOGGING_DEFAULT_LEVEL,
+            'class': 'logging.handlers.RotatingFileHandler',
+            'maxBytes': SECURITY_LOGGING_MAX_SIZE,
+            'backupCount': SECURITY_LOGGING_FILE_COUNT,
+            'filename': SECURITY_LOGGING_DIR + SECURITY_LOGGING_FILE_NAME,
+            'formatter': 'pws_verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['mail_admins', 'django'],
+            'level': LOGGING_DEFAULT_LEVEL,
+            'propagate': True,
+        },
+        'security': {
+            'handlers': ['security'],
+            'level': SECURITY_LOGGING_DEFAULT_LEVEL,
+            'propagate': True,
+        }
+    }
+}
+
+
 # LDAP authentication
-#import ldap
-#from django_auth_ldap.config import LDAPSearch, GroupOfUniqueNamesType
-#from django_auth_ldap.config import LDAPSearch, PosixGroupType
+import ldap
+# following is used in the NPAC SA LDAP
+from django_auth_ldap.config import LDAPSearch, GroupOfUniqueNamesType
+# following is used in the old NPAC LDAP
+from django_auth_ldap.config import LDAPSearch, PosixGroupType
 
 # LDAP base configuration
-#AUTH_LADP_SERVER_URI = 'ldap://localhost:1389'
-#AUTH_LDAP_BIND_AS_AUTHENTICATING_USER = True
-#AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=xxx,ou=xxx,dc=xxx,dc=xxx", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+AUTH_LADP_SERVER_URI = 'ldap://localhost:1389'
+AUTH_LDAP_BIND_AS_AUTHENTICATING_USER = True
+AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=xxx,ou=xxx,dc=xxx,dc=xxx", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+# following is for LDAPS
+AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,"+get_evn_setting("LDAP_SUBTREE")
+AUTH_LDAP_GLOBAL_OPTIONS = {
+    ldap.OPT_X_TLS_CACERTFILE: get_env_setting("LDAP_CERT_FILE")
+}
 
 # populate the Django local user list from the LDAP directory
-#AUTH_LDAP_USER_ATTR_MAP = {
-#    "first_name": "givenName",
-#    "last_name": "sn",
-#    "email": "mail"
-#}
+AUTH_LDAP_USER_ATTR_MAP = {
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail"
+}
 
 # map the Django user with permission from the LDAP app group
-#AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=xxx,ou=xxx,dc=xxx,dc=xxx", ldap.SCOPE_SUBTREE, "(objectClass=groupOfUniqueNames)")
-#AUTH_LDAP_GROUP_TYPE = GroupOfUniqueNamesType(name_attr="cn")
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=xxx,ou=xxx,dc=xxx,dc=xxx", ldap.SCOPE_SUBTREE, "(objectClass=groupOfUniqueNames)")
+AUTH_LDAP_GROUP_TYPE = GroupOfUniqueNamesType(name_attr="cn")
 
 # set Django 'is_staff' flag
-#AUTH_LDAP_USER_FLAG_BY_GROUP = {
-#    "is_staff": ["cn=Requester,ou=Papriqa,ou=BuildGroups,ou=Build,ou=unix,dc=npac,dc=ics,dc=iconectiv,dc=com",
-#                 "cn=Inventory_user,ou=Papriqa,ou=BuildGroups,ou=Build,ou=unix,dc=npac,dc=ics,dc=iconectiv,dc=com"]
-#}
+AUTH_LDAP_USER_FLAG_BY_GROUP = {
+    "is_staff": ["cn=Requester,ou=Papriqa,ou=BuildGroups,ou=Build,ou=unix,dc=npac,dc=ics,dc=iconectiv,dc=com",
+                 "cn=Inventory_user,ou=Papriqa,ou=BuildGroups,ou=Build,ou=unix,dc=npac,dc=ics,dc=iconectiv,dc=com"]
+}
 
 # Cache ldap group setting for 10 minutes to minimize LDAP traffic
-#AUTH_LDAP_CACHE_GROUPS = True
-#AUTH_LDAP_GROUP_CACHE_TIMEOUT = 1800
+AUTH_LDAP_CACHE_GROUPS = True
+AUTH_LDAP_GROUP_CACHE_TIMEOUT = 1800
 
 # use LDAP group membership to define group permission
-#AUTH_LDAP_FIND_GROUP_PERMS = True
-#AUTH_LDAP_MIRROR_GROUPS = True
+AUTH_LDAP_FIND_GROUP_PERMS = True
+AUTH_LDAP_MIRROR_GROUPS = True
 
 # Keep ModelBackend for per-user permissions and maybe a local superuser
-#AUTHENTICATION_BACKENDS = (
-#    'django_auth_ldap.backend.LDAPBackend',
-#    'django.contrib.auth.backends.ModelBackend'
-#)
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend'
+)
 
+"""

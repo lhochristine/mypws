@@ -1,0 +1,26 @@
+
+{% include "manifests/manifests_header.html" %}
+<div>
+    <table class="table" style="width: 65%" align="center">
+        <tbody>
+            <tr>
+                <td class="active noBorder" style="text-align: right;">Manifest Revision# </td>
+                <td class="active noBorder" style="color: #0099cc;">{{ manifest.revision }}</td>
+            </tr>
+            <tr>
+                <td class="active noBorder" style="text-align: right;">Release# </td>
+                <td class="active noBorder" style="color: #0099cc;">{{ manifest.release }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div style="text-align: center;">
+    <form action="/release_manifest/delete/{{ manifest.id }}" method="post" role="form">
+        {% csrf_token %}
+        <p style="height: 43px; font-family: Changa; font-size:20px">
+            Are you sure you want to delete the Manifest?</p>
+        <input type="submit" value="Yes, I'm sure." class="btn btn-s btn-primary form-control btn-center" id="submit-id-submit">
+        <a class="btn btn-s btn-primary" href="javascript:window.close();" role="button">Cancel</a>
+    </form>
+</div>
+{% include "manifests/manifests_footer.html" %}

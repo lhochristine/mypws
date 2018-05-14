@@ -8,6 +8,8 @@
 
       <title>DevOps Management App</title>
 
+      {{ formset.media }}
+
       <script src="{% static 'angular/angular.js' %}"></script>
       <script src="{% static 'jquery/jquery.min.js' %}"></script>
       <script src="{% static 'manifest/manifestindex.js' %}"></script>
@@ -34,26 +36,10 @@
       </script -->
 
       <script type="text/javascript">
-         $(function () {
-            $('#rc-radio').on('click', function() {
-               var text=$('#id_revision');
-               text.val('rc_');
-            });
-         });
-
-         $(function () {
-            $('#test-radio').on('click', function() {
-               var text=$('#id_revision');
-               text.val('test_');
-            });
-         });
-
-         $(function () {
-            $('#other-radio').on('click', function() {
-               var text=$('#id_revision');
-               var timeVal=Date.now()/1000 | 0;
-               text.val(timeVal);
-            });
+         $('.formst_row').formset({
+            addText: 'Add Artifact',
+            deleteText: 'Remove',
+            prefix: 'artifacts'
          });
       </script>
 
@@ -63,6 +49,7 @@
       <link href = "//getbootstrap.com/2.3.2/assets/css/bootstrap-responsive.css" rel = "stylesheet">
       <link href = "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel = "stylesheet">
 
+      <link href = "//fonts.googleapis.com/css?family=Changa" rel="stylesheet" type="text/css">
       <link href = "//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css"/>
 
       <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -100,6 +87,14 @@
         float: right;
         vertical-align: middle;
         text-decoration: bold;
+    }
+
+    tbody {
+        overflow-y: auto;
+    }
+
+    th {
+        display: block;
     }
 
     td.noBorder {

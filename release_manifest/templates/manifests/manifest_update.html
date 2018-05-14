@@ -1,0 +1,83 @@
+
+{% include "manifests/manifests_formset_header.html" %}
+
+<form action="/release_manifest/update/{{ manifest.id }}" method="post">
+    {% csrf_token %}
+    {% load formset_tags %}
+
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner" style="height: 43px;">
+            <div class="container-fluid">
+                <button type="button" class="btn btn-navbar" data-togger="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="brand" style="font-family: Changa;">Update Manifest Revision#
+                    <span style="color: #0099cc">{{ form.revision }}</span></a>
+                <a class="brand" style="font-family: Changa;">                           Release#
+                    <span style="color: #0099cc">{{ form.release }}</span></a>
+                <a class="brand" style="font-family: Changa;">                              Ext_Release#
+                    <span style="color: #0099cc">{{ form.ext_release }}</span></a>
+                <a class="brand" style="font-family: Changa;">                               Software Type
+                    <span style="color: #0099cc">{{ form.sw_type }}</span></a>
+                <a class="btn btn-primary pull-right" href="javascript:window.close();" role="button">Cancel</a>
+                    <input type="submit" class="btn btn-primary pull-right" vlaue="Submit" />
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row-fluid" id="updateDiv">
+                <div style="width: 100%; overflow-y: auto; height:300px;" >
+
+                    <table class="table" id="artifactTbl">
+                        {{ artifacts_form.management_form }}
+                        {% for form in artifacts_form.forms %}
+                        {% if forloop.first %}
+                            <thead style="font-weight:700; font-size: 11px; font-weight: bold; line-height: 20px; color: #0099cc; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5); text-transform: uppercase;">
+                                <tr>
+                                    <td>Artifact Name</td>
+                                    <td>Group</td>
+                                    <td>Version</td>
+                                    <td>Vendor</td>
+                                    <td>Var Name</td>
+                                    <td>Built By</td>
+                                    <td>Comment</td>
+                                    <td>Status</td>
+                                    <td>Deleted</td>
+                                </tr>
+                            </thead>
+                        {% endif %}
+
+                            <tr class="{% cycle 'row1' 'row2' %} formset_row">
+                                {% for field in form.visible_fields %}
+                                <td>
+                                    {% if forloop.first %}
+                                        {% for hidden in form.hidden_fields %}
+                                            {{ hidden }}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {{ field.errors.as_ul }}
+                                    {% if field.label == "Deleted" %}
+                                        {% if field.value %}
+                                            <span style="font-weight: bold; color: #ff0000">Not Included</span>
+                                        {% else %}
+                                            <span>Included</span>
+                                        {% endif %}
+                                        <td>{{ field }}</td>
+                                    {% else %}
+                                        {{ field }}
+                                    {% endif %}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% include "manifests/manifests_footer.html" %}
