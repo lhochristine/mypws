@@ -51,11 +51,11 @@
                            <ul class="nav nav-list">
                               <li class="nav-header">Filter by Revision</li>
                               <li><a href="#" ng-click="MasterFilter('all')">All Manifests</a></li>
-                              <li><a href="#">RC</a></li>
-                              <li><a hred="#">Non-RC</a></li>
+                              <li><a href="#" ng-click="MasterFilter('revision=rc')">RC</a></li>
+                              <li><a hred="#" ng-click="MasterFilter('revision=nonrc')">Non-RC</a></li>
                               <li class="nav-header">Filter by Release</li>
-                              <li><a href="#">4.2.0</a></li>
-                              <li><a href="#">4.1.0</a></li>
+                              <li><a href="#" ng-click="MasterFilter('release=4.2.0')">4.2.0</a></li>
+                              <li><a href="#" ng-click="MasterFilter('release=4.1.0')">4.1.0</a></li>
                            </ul>
                         </li>
                      </ul>
@@ -71,11 +71,11 @@
                            <ul class="nav nav-list">
                               <li class="nav-header">Filter by Revision</li>
                               <li><a href="#" ng-click="MasterFilter('opsall')">All Manifests</a></li>
-                              <li><a href="#">RC</a></li>
-                              <li><a href="#">Non-RC</a></li>
+                              <li><a href="#" ng-click="MasterFilter('opsrevision=rc')">RC</a></li>
+                              <li><a href="#" ng-click="MasterFilter('opsrevision=nonrc')">Non-RC</a></li>
                               <li class="nav-header">Filter by Release</li>
-                              <li><a href="#">4.2.0</a></li>
-                              <li><a href="#">4.1.0</a></li>
+                              <li><a href="#" ng-click="MasterFilter('opsrelease=4.2.0')">4.2.0</a></li>
+                              <li><a href="#" ng-click="MasterFilter('opsrelease=4.1.0')">4.1.0</a></li>
                            </ul>
                         </li>
                      </ul>

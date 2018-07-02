@@ -24,13 +24,13 @@ class ManifestViewSet(NestedViewSetMixin, ModelViewSet):
     queryset = Manifest.objects.order_by('-date_added')
     serializer_class = ManifestSerializer
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ['sw_type']
+    filter_fields = ['sw_type', 'revision']
 
 class ManifestShallowViewSet(ModelViewSet):
     queryset = Manifest.objects.order_by('-date_added')
     serializer_class = ManifestShallowSerializer
     filter_backends = (DjangoFilterBackend,)
-
+    filter_fields = ['sw_type', 'revision']
 
 class ArtifactViewSet(NestedViewSetMixin, ModelViewSet):
     queryset = Artifact.objects.all()

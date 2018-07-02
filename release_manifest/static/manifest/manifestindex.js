@@ -28,20 +28,51 @@ manifestApp.controller('ManifestController', function($scope, $http) {
 
     // retrieve function
     $scope.retrieve = function (query) {
-        console.log("In retrieve function... URL:" + $scope.JSON_URL)
+        var queryType = "";
+        var queryStr = "";
+
+        console.log("In retrieve function... URL:" + $scope.JSON_URL);
+        console.log("Query: " + query)
+        if (!query.match("all")) {
+            queryType = query.split("=")[0];
+            queryStr = query.split("=")[1];
+            console.log("QueryType: " + queryType + ", QueryStr: " + queryStr)
+        }
+
         $http.get($scope.JSON_URL)
             .then(function successCallback(response) {
             //.success(function(data, status, headers, config) {
-                $scope.manifests = response.data;
+                $scope.filteredData = [];
                 $scope.number = response.data.length;
                 console.log("GET succeed...(" + $scope.number +")" + $scope.manifests)
                 angular.forEach(response.data, function(manifest) {
-                    console.log("manifest release:" + manifest.release)
+                    console.log("manifest release:" + manifest.release + ", revision:" + manifest.revision)
+                    if (queryType) {
+                        if (query.startsWith("release")) {
+                            console.log("filtering release...")
+                            if (manifest.release.match(queryStr))
+                                $scope.filteredData.push(manifest);
+                        } else if (query.startsWith("revision")) {
+                            console.log("filtering revision...")
+                            if (queryStr.match("nonrc")) {
+                                if (!manifest.revision.startsWith("rc")) {
+                                    $scope.filteredData.push(manifest)
+                                }
+                            } else {
+                                if (manifest.revision.startsWith(queryStr)) {
+                                    $scope.filteredData.push(manifest)
+                                }
+                            }
+                        }
+                        $scope.manifests = $scope.filteredData
+                    } else {
+                        $scope.manifests = response.data;
+                    }
                 });
             })
             //.error(function(data, status, headers, config) {
             .catch(function errorCallback(response) {
-                console.error("ERROR!!! GET failed.", resonse.status, response.data);
+                console.error("ERROR!!! GET failed.", response.status, response.data);
             })
             .finally(function() {
                 console.log("Finally finished GET")
@@ -52,6 +83,7 @@ manifestApp.controller('ManifestController', function($scope, $http) {
         console.log("In MasterFilter, query=" + query)
         $scope.colorChange();
         if (query.startsWith("ops")) {
+            query = query.replace("ops", '');
             $scope.JSON_URL = path + '/release_manifest/api-json/mainfests/?sw_type=OPS';
         } else {
             $scope.JSON_URL = path + '/release_manifest/api-json/mainfests/?sw_type=PROD';
@@ -59,5 +91,5 @@ manifestApp.controller('ManifestController', function($scope, $http) {
         $scope.retrieve(query);
     }
 
-    $scope.retrieve();
+    $scope.retrieve('');
 });
